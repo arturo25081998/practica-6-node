@@ -1,31 +1,39 @@
-let command = process.argv[2];
 const fs = require("fs");
+const dbName = "koders.json";
+
+function init() {
+  const dbExist = fs.existsSync(dbName);
+  if (!dbExist) {
+    fs.writeFileSync(dbName, JSON.stringify([]), "utf-8");
+  }
+}
 
 const readBD = () => {
-  let userData = fs.readFileSync("user.json", "utf8");
+  let userData = fs.readFileSync(dbName, "utf8");
   return userData;
 };
 
-let users = JSON.parse(readBD());
+init();
+let command = process.argv[2];
+let koders = JSON.parse(readBD());
 
 switch (command) {
   case "ls":
-    users.users.forEach((user) => {
-      console.log(user);
+    koders.forEach((koder) => {
+      console.log(koder);
     });
     break;
   case "add":
-    users.users.push(process.argv[3]);
-    fs.writeFileSync("user.json", JSON.stringify(users), "utf-8");
+    koders.push(process.argv[3]);
+    fs.writeFileSync(dbName, JSON.stringify(koders), "utf-8");
     //console.log(users);
     break;
   case "rm":
-    users.users = users.users.filter((user) => user !== process.argv[3]);
-    //console.log(users);
-    fs.writeFileSync("user.json", JSON.stringify(users), "utf-8");
+    koders = koders.filter((koder) => koder !== process.argv[3]);
+    fs.writeFileSync(dbName, JSON.stringify(koders), "utf-8");
     break;
   case "reset":
-    console.log("Resetear");
-    fs.writeFileSync("user.json", '{"users":[]}', "utf-8");
+    console.log("Reset values for BD");
+    fs.writeFileSync(dbName, JSON.stringify([]), "utf-8");
     break;
 }
