@@ -16,16 +16,16 @@ switch (command) {
     break;
   case "add":
     users.users.push(process.argv[3]);
-    let newBd = JSON.stringify(users);
-    fs.writeFileSync("user.json", newBd, "utf-8");
+    fs.writeFileSync("user.json", JSON.stringify(users), "utf-8");
     //console.log(users);
     break;
   case "rm":
-    console.log("Elimianar");
+    users.users = users.users.filter((user) => user !== process.argv[3]);
+    //console.log(users);
+    fs.writeFileSync("user.json", JSON.stringify(users), "utf-8");
     break;
   case "reset":
     console.log("Resetear");
-    let reset = '{"users":[]}';
-    fs.writeFileSync("user.json", reset, "utf-8");
+    fs.writeFileSync("user.json", '{"users":[]}', "utf-8");
     break;
 }
